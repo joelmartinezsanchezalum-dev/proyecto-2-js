@@ -42,4 +42,4 @@ while (bucle == true) {
 
 
 
-ejemplo para comprobar si va
+console.log("prueba del github ")
