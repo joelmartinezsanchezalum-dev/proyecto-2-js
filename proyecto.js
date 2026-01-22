@@ -42,4 +42,3 @@ while (bucle == true) {
 
 
 
-console.log("prueba del github ")
