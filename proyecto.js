@@ -22,8 +22,6 @@ function llamada(valor1) {
     } else { 
         console.log ("Error, esta opcion no existe, pruebe de nuevo")
     }
-
-
 }
 
 let bucle = true
@@ -40,3 +38,8 @@ while (bucle == true) {
     let menuprincipal = Number.parseInt(prompt("Introdueix la teva opcio"));
     llamada(menuprincipal);
 }
+
+
+
+
+ejemplo para comprobar si va
