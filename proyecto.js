@@ -1,10 +1,15 @@
 const prompt = require("prompt-sync")({ sigint: true })
 const fs = require("fs");
-
-//funcion que enseña los tableros de juego 
+/**
+ * funcion que genera la carpeta de juego en caso de que 
+ * no exista, si existe lee la carpeta y los archivos
+ * correspondientes
+ *  */
 function carpetajuego() {
     console.log("Llista de taulers disponibles: ");
-    console.log(fs.readdirSync("./tauler").toString);
+    extarchivos = (fs.readdirSync("./tauler"))
+    extarchivos.toString()
+    console.log(extarchivos);
     let nomtablerouser = prompt("Introdueix la teva opcio");
 }
 
@@ -17,7 +22,7 @@ function llamada(valor1) {
     } else if (valor1 == 1) {
         if (fs.existsSync("./tauler")) { carpetajuego("") }
         else {
-            fs.mkdir("./tauler")
+            fs.mkdirSync("./tauler")
             carpetajuego("")
         }
     }
@@ -33,7 +38,7 @@ function llamada(valor1) {
 }
 
 let bucle = true
-
+let extarchivos = [];
 
 while (bucle == true) {
     console.log("----------------   ")
