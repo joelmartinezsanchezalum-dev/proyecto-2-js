@@ -75,16 +75,39 @@ const fs = require("fs");
 
 //lectura archivo tablero
 let nomtablerouser = prompt("aisdasddasd")
-
-let tablerojuego = fs.readFileSync("./tauler/"+nomtablerouser+".tauler")
+//lectura tablero pasa a una variable
+let tablerojuego = fs.readFileSync("./tauler/" + nomtablerouser + ".tauler")
+// tablero pasado a string
 let tablerojuegostring = tablerojuego.toString()
-let arraytablerojuego = [];
+// tablero separado por saltos
+tablerojuegostring = tablerojuegostring.split("\n");
+//tablero separado por espacio ( indice 0 asi que es la informacion)
+let informaciontablero = tablerojuegostring[0].split(" ")
+informaciontablero = informaciontablero.map(v => Number.parseInt(v))
+//eliminacion de 1ra fila 
+//creacion de un array de informacion
+let arrayfilajuego = [];
+let tablerofinal = [];
 
-for(let i= 0; i<tablerojuegostring.length; i++){
-    arraytablerojuego.push(tablerojuegostring[i])
-};
-console.log(arraytablerojuego);
+for (let fila = 1; fila < informaciontablero[1]+1; fila++) {
+    //escritura de la linea entera
+    //tab izq
+    for (let columna = 0; columna < informaciontablero[0]; columna++) {
+        arrayfilajuego.push(tablerojuegostring[fila][columna])
+    }
+    //salto
+    arrayfilajuego.push(" ")
+    //tablero der
+    for (let columna = 0; columna < informaciontablero[0]; columna++) {
+        arrayfilajuego.push(tablerojuegostring[fila+informaciontablero[1]+1][columna])
+    }
+    tablerofinal.push(arrayfilajuego)
+    arrayfilajuego = [];
+}
 
+let variable = tablerofinal[0].join("")+"\n"+tablerofinal[1].join("")+"\n"+tablerofinal[2].join("")
+
+console.log(variable)
 
 
 
