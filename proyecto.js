@@ -105,9 +105,9 @@ for (let fila = 1; fila < informaciontablero[1]+1; fila++) {
     arrayfilajuego = [];
 }
 
-let variable = tablerofinal[0].join("")+"\n"+tablerofinal[1].join("")+"\n"+tablerofinal[2].join("")
+let mostrarTableroFinal = tablerofinal[0].join("")+"\n"+tablerofinal[1].join("")+"\n"+tablerofinal[2].join("")
 
-console.log(variable)
+console.log(mostrarTableroFinal)
 
 
 
