@@ -44,7 +44,7 @@ function carpetajuego() {
                 arrayfilajuego.push(tablerojuegostring[fila][columna])
             }
             //salto
-            arrayfilajuego.push(" ")
+            arrayfilajuego.push(" | ")
             //tablero der
             for (let columna = 0; columna < informaciontablero[0]; columna++) {
                 arrayfilajuego.push(tablerojuegostring[fila + informaciontablero[1] + 1][columna])
@@ -54,7 +54,12 @@ function carpetajuego() {
         }
         let mostrarTableroFinal = tablerofinal[0].join("") + "\n" + tablerofinal[1].join("") + "\n" + tablerofinal[2].join("")
         console.log(mostrarTableroFinal)
-
+        let diferencias = Number.parseInt(prompt("Diferències trobades: "))
+        if (diferencias == informaciontablero[2]) {
+            console.log("Resposta correcta, molt bé!")
+        } else {
+            (console.log("Resposta incorrecta"))
+        }
     } else {
         error = true
         carpetajuego()
@@ -87,12 +92,12 @@ let ficheros = [];
 let error = false;
 while (bucle == true) {
     console.log("----------------   ")
-    console.log("0- salir")
-    console.log("1- jugar")
-    console.log("2- estadisticas partidas")
-    console.log("3- estadisticas tableros")
-    console.log("4- crear tablero nuevo")
-    console.log("----------------")
+    console.log("0- Sortir")
+    console.log("1- Jugar")
+    console.log("2- estadistiques de partides")
+    console.log("3- estadistiques dels taulells")
+    console.log("4- crear taulell nou")
+    console.log("----------------   ")
     let menuprincipal = Number.parseInt(prompt("Introdueix la teva opcio "));
     llamada(menuprincipal);
 }
