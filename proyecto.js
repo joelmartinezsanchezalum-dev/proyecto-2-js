@@ -205,6 +205,77 @@ function llamada(valor1) {
         prompt("Prem ENTER per tornar al menú...");
 
     } else if (valor1 == 4) {
+        console.clear();
+        console.log("=== CREACIÓ DE NOU TAULER ===");
+
+
+        let nomNouTauler;
+        let nomValid = false;
+
+
+        // para validadar el nombre
+        while (nomValid == false) {
+            nomNouTauler = prompt("Nom del nou tauler : ");
+            // Comprobamos si el archivo ya existe en la carpeta tauler/
+            if (fs.existsSync("./tauler/" + nomNouTauler + ".tauler")) {
+                console.log("Error: Aquest nom ja existeix. Tria un altre.");
+            } else if (nomNouTauler.trim() == "") {
+                console.log("Error: El nom no pot estar buit.");
+            } else {
+                nomValid = true; // Si no existe, salimos del bucle
+            }
+        }
+
+
+        let alçada;
+        let alçadaValida = false;
+
+
+        //  VALIDACIÓN DE ALTURA DEL TABLERO
+        while (alçadaValida == false) {
+            alçada = Number.parseInt(prompt("Alçada del tauler: "));
+            if (isNaN(alçada) || alçada <= 0) {
+                console.log("Error: L'alçada ha de ser un numero més gran que 0.");
+            } else {
+                alçadaValida = true;
+            }
+        }
+
+
+        let amplada;
+        let ampladaValida = false;
+
+
+        // VALIDACIÓN DE ANCHURA DEL TABLERO
+        while (ampladaValida == false) {
+            amplada = Number.parseInt(prompt("Amplada del tauler: "));
+            if (isNaN(amplada) || amplada <= 0) {
+                console.log("Error: L'amplada ha de ser un numero més gran que 0.");
+            } else {
+                ampladaValida = true;
+            }
+        }
+
+
+        // VALIDACIÓN DE DIFERENCIAS
+        let maxDiferencies = alçada * amplada; // Área total
+        let diferencies;
+        let difValides = false;
+
+
+        while (difValides == false) {
+            console.log("Màxim de diferències possibles: " + maxDiferencies);
+            diferencies = Number.parseInt(prompt("Número de diferències a amagar: "));
+
+            if (isNaN(diferencies) || diferencies < 0 || diferencies > maxDiferencies) {
+                console.log("Error: El número ha d'estar entre 0 i " + maxDiferencies);
+            } else {
+                difValides = true;
+            }
+        }
+
+
+        console.log("Dades validades correctament. Generant tauler...");
 
     } else {
         console.log("Error, esta opcion no existe, pruebe de nuevo")
