@@ -1,5 +1,7 @@
 const prompt = require("prompt-sync")({ sigint: true })
+const { table } = require("console");
 const fs = require("fs");
+const { arch } = require("os");
 /**
  * funcion que genera la carpeta de juego en caso de que 
  * no exista, si existe lee la carpeta y los archivos
@@ -53,7 +55,7 @@ function carpetajuego() {
             tablerofinal.push(arrayfilajuego)
             arrayfilajuego = [];
         }
-        let mostrarTableroFinal = tablerofinal[0].join("") + "\n" + tablerofinal[1].join("") + "\n" + tablerofinal[2].join("")
+        let mostrarTableroFinal = tablerofinal.map(fila => fila.join("")).join("\n");
         console.log(mostrarTableroFinal)
         let diferencias = Number.parseInt(prompt("Diferències trobades: "))
         if (diferencias == informaciontablero[2]) {
@@ -109,8 +111,98 @@ function llamada(valor1) {
         }
     }
     else if (valor1 == 2) {
+        console.clear();
+        console.log("=== ESTADISTIQUES DE LES PARTIDES ===");
 
+        if (fs.existsSync("partides.csv")) {
+
+            let dades = fs.readFileSync("partides.csv", "utf-8");
+
+            let linies = dades.split("\n"); // para separar cada partida por lineas individuales
+
+            // para quitar vacios
+            let partides = linies.filter(linia => linia.trim() !== "");
+
+            // para eliminar la primera linea que no es una partida
+            if (partides.length > 0) {
+                partides.shift();
+            }
+
+
+            partides.reverse();  // invertimos el array
+
+
+            // Cogemos solo las 10 primeras
+            let ultimas10 = partides.slice(0, 10);
+
+
+            //Mostramos los datos
+            for (let i = 0; i < ultimas10.length; i++) {
+                let camps = ultimas10[i].split(";"); // separamos por punto y coma
+
+                console.log("\nPartida " + (i + 1) + ":");
+                console.log(" - Data: " + camps[0]);
+
+                //se guardan los minutos por lo que dividimos por 1000
+                let segons = Math.floor(parseInt(camps[1]) / 1000);
+                console.log(" - Temps: " + segons + " segons"); //
+
+                console.log(" - Tauler: " + camps[2]); //
+                console.log(" - Resposta usuari: " + camps[3]);
+                console.log(" - Resultat: " + camps[4]);
+                console.log("--------------------------------");
+            }
+        } else {
+            console.log("Encara no hi ha partides registrades.");
+        }
+        //  ENTER para volver al menú
+        prompt("Prem ENTER per tornar al menú...");
     } else if (valor1 == 3) {
+        console.clear();
+        console.log("=== ESTADÍSTIQUES DELS TAULELLS ===");
+        let numtaulers = 0;
+        let archivostableros = fs.readdirSync("./tauler")
+        for (let i = 0; i < archivostableros.length; i++) {
+            numtaulers = numtaulers + 1;
+        }
+        if (archivostableros.length === 0) {
+            console.log("No hi ha taulers disponibles.");
+            prompt("Prem ENTER per tornar al menú...");
+            return;
+        }
+
+        let totalDiferencies = 0;
+        let totalAmplada = 0;
+        let totalAlcada = 0;
+        let totalArea = 0;
+
+        for (let i = 0; i < archivostableros.length; i++) {
+
+            let tablerojuego = fs.readFileSync("./tauler/" + archivostableros[i]);
+            let tablerojuegostring = tablerojuego.toString().split("\n");
+
+            // Informació del tauler
+            let informaciontablero = tablerojuegostring[0].split(" ").map(v => Number.parseInt(v));
+
+            let amplada = informaciontablero[0];
+            let alcada = informaciontablero[1];
+            let diferencies = informaciontablero[2];
+            let area = amplada * alcada;
+
+            totalAmplada += amplada;
+            totalAlcada += alcada;
+            totalDiferencies += diferencies;
+            totalArea += area;
+        }
+        let numTaulers = archivostableros.length;
+        console.log("\nN'hi han " + numtaulers + " taulers");
+        console.log("Mitjana de diferències: " + (totalDiferencies / numTaulers).toFixed(2));
+        console.log("Amplada mitjana: " + (totalAmplada / numTaulers).toFixed(2));
+        console.log("Alçada mitjana: " + (totalAlcada / numTaulers).toFixed(2));
+        console.log("Àrea mitjana: " + (totalArea / numTaulers).toFixed(2));
+
+        console.log("--------------------------------");
+        prompt("Prem ENTER per tornar al menú...");
 
     } else if (valor1 == 4) {
 
