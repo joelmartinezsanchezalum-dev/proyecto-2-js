@@ -24,6 +24,7 @@ function carpetajuego() {
     }
     let nomtablerouser = prompt("Introdueix la teva opcio: ");
     if (fs.existsSync("./tauler/" + nomtablerouser + ".tauler")) {
+        let iniciPartida = Date.now();
         let tablerojuego = fs.readFileSync("./tauler/" + nomtablerouser + ".tauler")
         console.log("Tauler seleccionat: " + nomtablerouser);
         // tablero pasado a string
@@ -60,6 +61,36 @@ function carpetajuego() {
         } else {
             (console.log("Resposta incorrecta"))
         }
+        // fi de la partida
+        let fiPartida = Date.now();
+        let duracio = fiPartida - iniciPartida; // en mil·lisegons
+
+        // formatar data
+        let dataPartida = new Date(iniciPartida).toLocaleString();
+
+        // nom del tauler sense extensió
+        let nomTauler = nomtablerouser;
+
+        // resposta usuari
+        let respostaUsuari = diferencias;
+
+        // guanyat o perdut
+        let resultat = (diferencias == informaciontablero[2]) ? "Guanyat" : "Perdut";
+
+        // crear línia CSV
+        let liniaCSV = `${dataPartida};${duracio};${nomTauler};${respostaUsuari};${resultat}\n`;
+
+        // si no existeix el fitxer, crear-lo amb capçalera
+        if (!fs.existsSync("partides.csv")) {
+            fs.writeFileSync("partides.csv", "Data;Duracio(ms);Tauler;Resposta;Resultat\n");
+        }
+
+        // afegir la línia
+        fs.appendFileSync("partides.csv", liniaCSV);
+
+        // esperar ENTER per tornar al menú
+        prompt("Prem ENTER per tornar al menú...");
+
     } else {
         error = true
         carpetajuego()
