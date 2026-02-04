@@ -66,33 +66,24 @@ function carpetajuego() {
         // fi de la partida
         let fiPartida = Date.now();
         let duracio = fiPartida - iniciPartida; // en mil·lisegons
-
         // formatar data
         let dataPartida = new Date(iniciPartida).toLocaleString();
-
         // nom del tauler sense extensió
         let nomTauler = nomtablerouser;
-
         // resposta usuari
         let respostaUsuari = diferencias;
-
         // guanyat o perdut
         let resultat = (diferencias == informaciontablero[2]) ? "Guanyat" : "Perdut";
-
         // crear línia CSV
         let liniaCSV = `${dataPartida};${duracio};${nomTauler};${respostaUsuari};${resultat}\n`;
-
         // si no existeix el fitxer, crear-lo amb capçalera
         if (!fs.existsSync("partides.csv")) {
             fs.writeFileSync("partides.csv", "Data;Duracio(ms);Tauler;Resposta;Resultat\n");
         }
-
         // afegir la línia
         fs.appendFileSync("partides.csv", liniaCSV);
-
         // esperar ENTER per tornar al menú
         prompt("Prem ENTER per tornar al menú...");
-
     } else {
         error = true
         carpetajuego()
@@ -113,40 +104,26 @@ function llamada(valor1) {
     else if (valor1 == 2) {
         console.clear();
         console.log("=== ESTADISTIQUES DE LES PARTIDES ===");
-
         if (fs.existsSync("partides.csv")) {
-
             let dades = fs.readFileSync("partides.csv", "utf-8");
-
             let linies = dades.split("\n"); // para separar cada partida por lineas individuales
-
             // para quitar vacios
             let partides = linies.filter(linia => linia.trim() !== "");
-
             // para eliminar la primera linea que no es una partida
             if (partides.length > 0) {
                 partides.shift();
             }
-
-
             partides.reverse();  // invertimos el array
-
-
             // Cogemos solo las 10 primeras
             let ultimas10 = partides.slice(0, 10);
-
-
             //Mostramos los datos
             for (let i = 0; i < ultimas10.length; i++) {
                 let camps = ultimas10[i].split(";"); // separamos por punto y coma
-
                 console.log("\nPartida " + (i + 1) + ":");
                 console.log(" - Data: " + camps[0]);
-
                 //se guardan los minutos por lo que dividimos por 1000
                 let segons = Math.floor(parseInt(camps[1]) / 1000);
                 console.log(" - Temps: " + segons + " segons"); //
-
                 console.log(" - Tauler: " + camps[2]); //
                 console.log(" - Resposta usuari: " + camps[3]);
                 console.log(" - Resultat: " + camps[4]);
@@ -170,25 +147,19 @@ function llamada(valor1) {
             prompt("Prem ENTER per tornar al menú...");
             return;
         }
-
         let totalDiferencies = 0;
         let totalAmplada = 0;
         let totalAlcada = 0;
         let totalArea = 0;
-
         for (let i = 0; i < archivostableros.length; i++) {
-
             let tablerojuego = fs.readFileSync("./tauler/" + archivostableros[i]);
             let tablerojuegostring = tablerojuego.toString().split("\n");
-
             // Informació del tauler
             let informaciontablero = tablerojuegostring[0].split(" ").map(v => Number.parseInt(v));
-
             let amplada = informaciontablero[0];
             let alcada = informaciontablero[1];
             let diferencies = informaciontablero[2];
             let area = amplada * alcada;
-
             totalAmplada += amplada;
             totalAlcada += alcada;
             totalDiferencies += diferencies;
@@ -200,37 +171,29 @@ function llamada(valor1) {
         console.log("Amplada mitjana: " + (totalAmplada / numTaulers).toFixed(2));
         console.log("Alçada mitjana: " + (totalAlcada / numTaulers).toFixed(2));
         console.log("Àrea mitjana: " + (totalArea / numTaulers).toFixed(2));
-
         console.log("--------------------------------");
         prompt("Prem ENTER per tornar al menú...");
-
     } else if (valor1 == 4) {
-        console.clear();
-        console.log("=== CREACIÓ DE NOU TAULER ===");
-
-
         let nomNouTauler;
         let nomValid = false;
-
-
         // para validadar el nombre
         while (nomValid == false) {
+            console.clear()
+            console.log("=== CREACIÓ DE NOU TAULER ===");
             nomNouTauler = prompt("Nom del nou tauler : ");
             // Comprobamos si el archivo ya existe en la carpeta tauler/
             if (fs.existsSync("./tauler/" + nomNouTauler + ".tauler")) {
                 console.log("Error: Aquest nom ja existeix. Tria un altre.");
+                prompt("Prem ENTER per tornar seleccionar nom...");
             } else if (nomNouTauler.trim() == "") {
                 console.log("Error: El nom no pot estar buit.");
             } else {
                 nomValid = true; // Si no existe, salimos del bucle
+                fs.writeFileSync(nomNouTauler + ".tauler", "")
             }
         }
-
-
         let alçada;
         let alçadaValida = false;
-
-
         //  VALIDACIÓN DE ALTURA DEL TABLERO
         while (alçadaValida == false) {
             alçada = Number.parseInt(prompt("Alçada del tauler: "));
@@ -240,12 +203,8 @@ function llamada(valor1) {
                 alçadaValida = true;
             }
         }
-
-
         let amplada;
         let ampladaValida = false;
-
-
         // VALIDACIÓN DE ANCHURA DEL TABLERO
         while (ampladaValida == false) {
             amplada = Number.parseInt(prompt("Amplada del tauler: "));
@@ -255,27 +214,37 @@ function llamada(valor1) {
                 ampladaValida = true;
             }
         }
-
-
         // VALIDACIÓN DE DIFERENCIAS
         let maxDiferencies = alçada * amplada; // Área total
         let diferencies;
         let difValides = false;
-
-
         while (difValides == false) {
             console.log("Màxim de diferències possibles: " + maxDiferencies);
             diferencies = Number.parseInt(prompt("Número de diferències a amagar: "));
-
             if (isNaN(diferencies) || diferencies < 0 || diferencies > maxDiferencies) {
                 console.log("Error: El número ha d'estar entre 0 i " + maxDiferencies);
             } else {
                 difValides = true;
             }
         }
-
-
+        //Generació del taulell
         console.log("Dades validades correctament. Generant tauler...");
+        let variablestableronuevo = [amplada, alçada, diferencies]
+        let generaciontabla = Number.parseInt((Math.random() * 1));
+        for (let i = 0; i < variablestableronuevo.length; i++) {
+            fs.appendFileSync(nomNouTauler + ".tauler", variablestableronuevo[i].toString() + " ");
+        } fs.appendFileSync(nomNouTauler + ".tauler", "\n")
+        for (let i = 0; i < alçada; i++) {
+            for (let k = 0; k < amplada; k++) {
+                generaciontabla = Number.parseInt((Math.random() * 1))
+                if (generaciontabla == 0) {
+                    fs.appendFileSync(nomNouTauler +".tauler", "O")
+                }
+                if (generaciontabla == 1) { 
+                    fs.appendFileSync(nomNouTauler +".tauler", "X") }
+            }fs.appendFileSync(nomNouTauler+".tauler","\n")
+        }
+
 
     } else {
         console.log("Error, esta opcion no existe, pruebe de nuevo")
@@ -295,43 +264,3 @@ while (bucle == true) {
     let menuprincipal = Number.parseInt(prompt("Introdueix la teva opcio "));
     llamada(menuprincipal);
 }
-
-// //lectura archivo tablero
-// let nomtablerouser = prompt("Quin tauler vols seleccionar? ")
-// //lectura tablero pasa a una variable
-// let tablerojuego = fs.readFileSync("./tauler/" + nomtablerouser + ".tauler")
-// // tablero pasado a string
-// let tablerojuegostring = tablerojuego.toString()
-// // tablero separado por saltos
-// tablerojuegostring = tablerojuegostring.split("\n");
-// //tablero separado por espacio ( indice 0 asi que es la informacion)
-// let informaciontablero = tablerojuegostring[0].split(" ")
-// informaciontablero = informaciontablero.map(v => Number.parseInt(v))
-// //eliminacion de 1ra fila 
-// //creacion de un array de informacion
-// let arrayfilajuego = [];
-// let tablerofinal = [];
-// for (let fila = 1; fila < informaciontablero[1] + 1; fila++) {
-//     //escritura de la linea entera
-//     //tab izq
-//     for (let columna = 0; columna < informaciontablero[0]; columna++) {
-//         arrayfilajuego.push(tablerojuegostring[fila][columna])
-//     }
-//     //salto
-//     arrayfilajuego.push(" ")
-//     //tablero der
-//     for (let columna = 0; columna < informaciontablero[0]; columna++) {
-//         arrayfilajuego.push(tablerojuegostring[fila + informaciontablero[1] + 1][columna])
-//     }
-//     tablerofinal.push(arrayfilajuego)
-//     arrayfilajuego = [];
-// }
-// let mostrarTableroFinal = tablerofinal[0].join("") + "\n" + tablerofinal[1].join("") + "\n" + tablerofinal[2].join("")
-// console.log(mostrarTableroFinal)
-
-
-
-
-
-
-
