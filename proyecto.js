@@ -235,17 +235,36 @@ function llamada(valor1) {
             fs.appendFileSync(nomNouTauler + ".tauler", variablestableronuevo[i].toString() + " ");
         } fs.appendFileSync(nomNouTauler + ".tauler", "\n")
         for (let i = 0; i < alçada; i++) {
+            tablausuario.push([])
             for (let k = 0; k < amplada; k++) {
-                generaciontabla = Number.parseInt((Math.random() * 1))
+                generaciontabla = Number.parseInt((Math.random() * 2))
                 if (generaciontabla == 0) {
-                    fs.appendFileSync(nomNouTauler +".tauler", "O")
+                    fs.appendFileSync(nomNouTauler + ".tauler", "O")
+                    tablausuario[i].push("O");
                 }
-                if (generaciontabla == 1) { 
-                    fs.appendFileSync(nomNouTauler +".tauler", "X") }
-            }fs.appendFileSync(nomNouTauler+".tauler","\n")
+                if (generaciontabla == 1) {
+                    fs.appendFileSync(nomNouTauler + ".tauler", "X")
+                    tablausuario[i].push("X");
+                }
+            } fs.appendFileSync(nomNouTauler + ".tauler", "\n");
+        }
+        for (let i = 0; i < diferencies; i++) {
+            let fila = Number.parseInt((Math.random() * alçada))
+            let columna = Number.parseInt((Math.random() * amplada))
+            if (tablausuario[fila][columna] == "O") {
+                tablausuario[fila][columna] = "X"
+            } else (tablausuario[fila][columna] = "O")
+        }
+        console.log(tablausuario)
+        let contingut = "\n"; // línia buida entre taulers
+
+        for (let fila of tablausuario) {
+            contingut += fila.join("") + "\n";
         }
 
+        fs.appendFileSync(nomNouTauler + ".tauler", contingut);
 
+        tablausuario = [];
     } else {
         console.log("Error, esta opcion no existe, pruebe de nuevo")
     }
@@ -253,6 +272,9 @@ function llamada(valor1) {
 let bucle = true
 let ficheros = [];
 let error = false;
+let tablausuario = [];
+let contingut = "";
+
 while (bucle == true) {
     console.log("----------------   ")
     console.log("0- Sortir")
